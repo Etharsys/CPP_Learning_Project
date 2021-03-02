@@ -113,4 +113,13 @@ void exit_loop()
     glutLeaveMainLoop();
 }
 
+void change_ticks(int newTick)
+{
+    if (ticks_per_sec + newTick > 120 || ticks_per_sec + newTick < 1)
+    {
+        return;
+    }
+    ticks_per_sec += newTick;
+}
+
 } // namespace GL
