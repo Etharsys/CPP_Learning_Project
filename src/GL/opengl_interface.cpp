@@ -76,9 +76,29 @@ void timer(const int step)
     // TASK_0 C-2: pause.
     if (!is_paused)
     {
-        for (auto& item : move_queue)
+        // TASK_0 C-4: remove aircrafts
+        // We need to replace the foreach with a for with iterator,
+        // because we are going to modify the container while iterating
+        // through it.
+        for (auto it = move_queue.begin(); it != move_queue.end();)
         {
-            item->move();
+            auto* dynamic_obj = *it;
+            if (dynamic_obj->update())
+            {
+                ++it;
+            }
+            else
+            {
+                it = move_queue.erase(it);
+
+                // If the DynamicObject is also a Displayable, we need to remove it from the display_queue.
+                if (auto* displayable = dynamic_cast<Displayable*>(dynamic_obj))
+                {
+                    display_queue.erase(std::find(display_queue.begin(), display_queue.end(), displayable));
+                }
+
+                delete dynamic_obj;
+            }
         }
     }
 
