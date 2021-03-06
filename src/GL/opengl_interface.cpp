@@ -73,10 +73,15 @@ void display(void)
 
 void timer(const int step)
 {
-    for (auto& item : move_queue)
+    // TASK_0 C-2: pause.
+    if (!is_paused)
     {
-        item->move();
+        for (auto& item : move_queue)
+        {
+            item->move();
+        }
     }
+
     glutPostRedisplay();
     glutTimerFunc(1000u / ticks_per_sec, timer, step + 1);
 }

@@ -7,6 +7,7 @@
 #include "img/image.hpp"
 #include "img/media_path.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <ctime>
@@ -57,6 +58,19 @@ void TowerSimulation::create_keystrokes() const
     GL::keystrokes.emplace('+', []() { GL::change_zoom(0.95f); });
     GL::keystrokes.emplace('-', []() { GL::change_zoom(1.05f); });
     GL::keystrokes.emplace('f', []() { GL::toggle_fullscreen(); });
+
+    // TASK_0 C-2: framerate control
+    // Framerate cannot equal 0 or the program would get stuck / crash.
+    // Also, in a "real" program, the maximal framerate should always be capped (you can see why if you do the
+    // bonus part).
+    GL::keystrokes.emplace('z', []() { GL::ticks_per_sec = std::max(GL::ticks_per_sec - 1u, 1u); });
+    GL::keystrokes.emplace('a', []() { GL::ticks_per_sec = std::min(GL::ticks_per_sec + 1u, 180u); });
+
+    // TASK_0 C-2: pause
+    // Since the framerate cannot be 0, we introduce a new variable to manage this info.
+    // Also, it would make no sense to use the framerate to simulate the pause, cause how would we unpause if
+    // the program is not running anymore ?
+    GL::keystrokes.emplace('p', []() { GL::is_paused = !GL::is_paused; });
 }
 
 void TowerSimulation::display_help() const
