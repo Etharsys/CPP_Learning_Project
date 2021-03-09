@@ -6,6 +6,7 @@ La création des avions est aujourd'hui gérée par les fonctions `TowerSimulati
 Chaque avion créé est ensuite placé dans les files `GL::display_queue` et `GL::move_queue`.
 
 Si à un moment quelconque du programme, vous souhaitiez accéder à l'avion ayant le numéro de vol "AF1250", que devriez-vous faire ?
+Je suppose que l'on doit parcourir l'une des 2 files précédentes pour trouver "AF1250".
 
 ---
 
@@ -17,7 +18,11 @@ Pour trouver un avion particulier dans le programme, ce serait pratique d'avoir 
 
 Vous avez 2 choix possibles :
 - créer une nouvelle classe, `AircraftManager`, qui assumera ce rôle,
+pros : assez simple de juste créer une nouvelle classe 
+cons : ajouter une nouvelle classe (plus lourd)
 - donner ce rôle à une classe existante.
+pros : 
+cons : complexifie le programme en ajoutant un lien d'appartenance
 
 Réfléchissez aux pour et contre de chacune de ces options.
 

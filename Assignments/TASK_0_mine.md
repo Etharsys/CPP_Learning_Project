@@ -93,7 +93,7 @@ Il s'agit de cette variable : constexpr unsigned int SERVICE_CYCLES = 20u;
 <<<<<<< HEAD
 4) Lorsqu'un avion décolle, celui-ci n'est pas retiré du programme.
 Faites en sorte qu'il le soit.
-Il faut dans la fonction finish_service() de la classe terminal faire un : delete current_aircraft;
+Dans aircraft il faut supprimer l'avion des listes (move_queue et display_queue).
 =======
 4) Lorsqu'un avion a décollé, il réattérit peu de temps après.
 Faites en sorte qu'à la place, il soit retiré du programme.\

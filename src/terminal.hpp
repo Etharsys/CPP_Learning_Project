@@ -36,7 +36,6 @@ public:
         {
             std::cout << "done servicing " << current_aircraft->get_flight_num() << '\n';
             current_aircraft = nullptr;
-            delete current_aircraft;
         }
     }
 

@@ -81,6 +81,7 @@ void TowerSimulation::init_airport()
 
     GL::display_queue.emplace_back(airport);
     GL::move_queue.emplace(airport);
+
 }
 
 void TowerSimulation::launch()
