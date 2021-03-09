@@ -37,7 +37,7 @@ Répondez aux questions suivantes :
 1. Qui est responsable de détruire les avions du programme ? (si vous ne trouvez pas, faites/continuez la question 4 dans TASK_0)
 2. Quelles autres structures contiennent une référence sur un avion au moment où il doit être détruit ?
 3. Comment fait-on pour supprimer la référence sur un avion qui va être détruit dans ces structures ?
-4. Pourquoi ne pouvez-vous pas appliquer la même chose sur votre conteneur d'avions ?
+4. Pourquoi n'est-il pas très judicieux d'essayer d'appliquer la même chose pour votre `AircraftManager` ?
 
 Pour simplifier le problème, vous allez déplacer l'ownership des avions dans la classe `AircraftManager`.
 Vous allez également faire en sorte que ce soit cette classe qui s'occupe de déplacer les avions, et non plus la fonction `timer`.
@@ -96,15 +96,14 @@ Si vous voulez de nouveaux sprites, vous pouvez en trouver sur [cette page](http
 
 ## Objectif 3 - Pool de textures (optionnel)
 
-Au moment, chacun des `AircraftType` contient et charge leurs propres sprites.
-On pourrait néanmoins avoir différents `AircraftType` qui utilisent les mêmes sprites qui serait donc chargés plusieurs fois du disque.
+Pour le moment, chacun des `AircraftType` contient et charge ses propres sprites.
+On pourrait néanmoins avoir différents `AircraftType` qui utilisent les mêmes sprites.
+Ils seraient donc chargés plusieurs fois depuis le disque pour rien.
 
-Pour rendre le programme un peu plus performant, on voudrait eviter ces chargement répétés de disque.
-À ce fin, implémentez une classe `TexturePool` qui s'occupe de charger, stocker, et servir les textures.
-Penser bien à l'ownership des textures et des type utilisé pour les servir.
+Pour rendre le programme un peu plus performant, implémentez une classe `TexturePool` qui s'occupe de charger, stocker et fournir les textures.
+Réfléchissez bien au type que vous allez utiliser pour référencer les textures, afin d'exprimer correctement l'ownership.
 
-Rendez-vous compte des classes qui ont besoin de communiquer avec `TexturePool`.
-Selon vous, quelle classe devrait être proprieteur du (seul) instance de `TexturePool` ?
-Etes-vous sur que votre implementation ne laisse pas des fuites de memoire au moment ou cette instance est détruite ?
-
-...
+Listez les classes qui ont besoin de `TexturePool`.
+Sachant que vous n'aurez qu'une seule instance de `TexturePool` dans votre programme, quelle classe devra assumer l'ownership de cet objet ?\
+Instanciez `TexturePool` au bon endroit et refactorisez le code afin que tous les chargements de textures utilisent ce nouvel objet.
+Assurez-vous que votre implémentation ne génère pas des fuites de mémoire au moment de sa destruction.

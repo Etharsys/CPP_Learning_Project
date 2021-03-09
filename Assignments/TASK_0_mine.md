@@ -1,6 +1,6 @@
 # Se familiariser avec l'existant
 
-## Exécution
+## A- Exécution
 
 Compilez et lancez le programme.
 
@@ -23,7 +23,7 @@ Ajoutez maintenant quatre avions d'un coup dans la simulation.
 Que fait chacun des avions ? Ils tournent en attendant de pouvoir attérir 
 (max 3 dans l'aéroport). Puis redécollent pour attendre d'attérir.
 
-## Analyse du code
+## B- Analyse du code
 
 Listez les classes du programme à la racine du dossier src/.
 Pour chacune d'entre elle, expliquez ce qu'elle représente et son rôle dans le programme.
@@ -58,7 +58,7 @@ tower avec les méthodes get_circle et get_instructions.
 Quel conteneur de la librairie standard a été choisi pour représenter le chemin ? Point3D (que l'on désigne comme direction)
 Expliquez les intérêts de ce choix. Un point paraît peu coûteux pour stocker l'information.
 
-## Bidouillons !
+## C- Bidouillons !
 
 1) Déterminez à quel endroit du code sont définies les vitesses maximales et accélération de chaque avion. Dans la classe aircraft_types
 Le Concorde est censé pouvoir voler plus vite que les autres avions.
@@ -84,8 +84,12 @@ Essayez maintenant de mettre en pause le programme en manipulant ce framerate. Q
 Fallait pas passer dans les négatifs (ou même 0)... mais du coup j'ai déjà fait !
 =======
 Essayez maintenant de mettre en pause le programme en manipulant ce framerate. Que se passe-t-il ?\
+<<<<<<< HEAD:Assignments/TASK_0_mine.md
 Ajoutez une nouvelle fonctionnalité au programme pour mettre le programme en pause, et qui ne passe pas par le framerate ? 
 >>>>>>> upstream/master
+=======
+Ajoutez une nouvelle fonctionnalité au programme pour mettre le programme en pause, et qui ne passe pas par le framerate.
+>>>>>>> upstream/master:Assignments/TASK_0.md
 
 3) Identifiez quelle variable contrôle le temps de débarquement des avions et doublez-le.
 Il s'agit de cette variable : constexpr unsigned int SERVICE_CYCLES = 20u;
@@ -106,6 +110,7 @@ Que devez-vous modifier pour transmettre l'information de la première à la sec
 
 5) Lorsqu'un objet de type `Displayable` est créé, il faut ajouter celui-ci manuellement dans la liste des objets à afficher.
 Il faut également penser à le supprimer de cette liste avant de le détruire.
+<<<<<<< HEAD:Assignments/TASK_0_mine.md
 Que pourriez-vous faire afin que l'ajout et la suppression de la liste soit "automatiquement gérée" lorsqu'un `Displayable` est créé ou détruit ?
 <<<<<<< HEAD
 Faites de même pour `DynamicObject`. //TODO
@@ -113,6 +118,10 @@ Il faut ajouter du code dans les constructeur/destructeur des classes `Displayab
 =======
 Pensez-vous qu'il soit pertinent d'en faire de même pour `DynamicObject` ?
 >>>>>>> upstream/master
+=======
+Faites en sorte que l'ajout et la suppression de `display_queue` soit "automatiquement gérée" lorsqu'un `Displayable` est créé ou détruit.
+Pourquoi n'est-il pas spécialement pertinent d'en faire de même pour `DynamicObject` ?
+>>>>>>> upstream/master:Assignments/TASK_0.md
 
 6) La tour de contrôle a besoin de stocker pour tout `Aircraft` le `Terminal` qui lui est actuellement attribué, afin de pouvoir le libérer une fois que l'avion décolle.
 Cette information est actuellement enregistrée dans un `std::vector<std::pair<const Aircraft*, size_t>>` (size_t représentant l'indice du terminal).
@@ -122,7 +131,7 @@ Modifiez le code afin d'utiliser un conteneur STL plus adapté. Normalement, à 
 on peut utiliser un map<const aircraft&, size_t>.
 et il existe la méthode find de map qui renvoie un const iterator avec : const auto it = reserved_terminals.find(&aircraft);
 
-## Théorie
+## D- Théorie
 
 1) Comment a-t-on fait pour que seule la classe `Tower` puisse réserver un terminal de l'aéroport ?
 Toutes les fonctions de airport sont private (donc inutilisable par les autres classes), mais : friend class Tower;
@@ -134,7 +143,7 @@ Pensez-vous qu'il soit possible d'éviter la copie du `Point3D` passé en param�
 target = target - pos - speed;
 turn (target);
 
-## Bonus
+## E- Bonus
 
 Le temps qui s'écoule dans la simulation dépend du framerate du programme.
 La fonction move() n'utilise pas le vrai temps. Faites en sorte que si.
