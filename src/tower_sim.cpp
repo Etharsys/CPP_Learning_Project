@@ -77,9 +77,9 @@ void TowerSimulation::display_help() const
     std::cout << "This is an airport tower simulator" << std::endl
               << "the following keysstrokes have meaning:" << std::endl;
 
-    for (const auto& ks_pair : GL::keystrokes)
+    for (const auto& [key_pair, value_pair] : GL::keystrokes)
     {
-        std::cout << ks_pair.first << ' ';
+        std::cout << key_pair << ' ';
     }
 
     std::cout << std::endl;

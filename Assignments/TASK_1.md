@@ -16,8 +16,8 @@ Si à un moment quelconque du programme, vous souhaitiez accéder à l'avion aya
 Pour trouver un avion particulier dans le programme, ce serait pratique d'avoir une classe qui référence tous les avions et qui peut donc nous renvoyer celui qui nous intéresse.
 
 Vous avez 2 choix possibles :
-- créer une nouvelle classe, `AircraftManager`, qui assumera ce rôle,
-- donner ce rôle à une classe existante.
+- créer une nouvelle classe, `AircraftManager`, qui assumera ce rôle, //faut la développer... / gros projet : plus clair
+- donner ce rôle à une classe existante. //trop de resp. (casse l'encapsulation & les invariant de classe) / petit projet : facile d'implémenter
 
 Réfléchissez aux pour et contre de chacune de ces options.
 
@@ -29,13 +29,15 @@ Vous allez introduire une nouvelle liste de références sur les avions du progr
 Il serait donc bon de savoir qui est censé détruire les avions du programme, afin de déterminer comment vous allez pouvoir mettre à jour votre gestionnaire d'avions lorsque l'un d'entre eux disparaît.
 
 Répondez aux questions suivantes :
-1. Qui est responsable de détruire les avions du programme ? (si vous ne trouvez pas, faites/continuez la question 4 dans TASK_0)
-2. Quelles autres structures contiennent une référence sur un avion au moment où il doit être détruit ?
-3. Comment fait-on pour supprimer la référence sur un avion qui va être détruit dans ces structures ?
-4. Pourquoi n'est-il pas très judicieux d'essayer d'appliquer la même chose pour votre `AircraftManager` ?
+1. Qui est responsable de détruire les avions du programme ? (si vous ne trouvez pas, faites/continuez la question 4 dans TASK_0) la fonction timer de opengl_interface.
+2. Quelles autres structures contiennent une référence sur un avion au moment où il doit être détruit ? tower & terminal & les queue
+3. Comment fait-on pour supprimer la référence sur un avion qui va être détruit dans ces structures ? nullptr dans tower et terminal,
+destruction dans timer, et move & dislpay queue : on retire
+4. Pourquoi n'est-il pas très judicieux d'essayer d'appliquer la même chose pour votre `AircraftManager` ? car c'est la owner (responsable de destruction)
 
-Pour simplifier le problème, vous allez déplacer l'ownership des avions dans la classe `AircraftManager`.
+Pour simplifier le problème, vous allez déplacer l'ownership des avions dans la classe `AircraftManager`. 
 Vous allez également faire en sorte que ce soit cette classe qui s'occupe de déplacer les avions, et non plus la fonction `timer`.
+il va falloir utiliser un unique_ptr.
 
 ### C - C'est parti !
 
