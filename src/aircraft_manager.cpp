@@ -10,8 +10,14 @@ void AircraftManager::add(std::unique_ptr<Aircraft> aircraft)
 bool AircraftManager::update()
 {
     aircrafts.erase( std::remove_if(aircrafts.begin(), aircrafts.end(),
-            [](const std::unique_ptr<Aircraft>& aircraft){ 
-                return !aircraft->update(); }), aircrafts.end());
+            [](const std::unique_ptr<Aircraft>& aircraft){ //try catch ici
+                bool up;
+                try {
+                    up = !aircraft->update();
+                } catch (const AircraftCrash& ac) {
+                    std::cerr << "aircraft has crash" << std::endl;
+                }
+                return up; }), aircrafts.end());
 
     /*for (auto aircraft_it = aircrafts.begin(); aircraft_it != aircrafts.end();)
     {

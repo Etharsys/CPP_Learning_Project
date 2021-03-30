@@ -122,6 +122,7 @@ bool Aircraft::update()
 
         if (is_on_ground())
         {
+            landing_gear_deployed = false;
             if (!landing_gear_deployed)
             {
                 using namespace std::string_literals;
