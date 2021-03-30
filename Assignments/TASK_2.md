@@ -54,10 +54,13 @@ Actuellement, chaque avion interroge la tour de contrôle pour réserver un term
 Si un terminal est libre, la tour lui donne le chemin pour l'atteindre, sinon, elle lui demande de tourner autour de l'aéroport.
 Pour pouvoir prioriser les avions avec moins d'essence, il faudrait déjà que les avions tentent de réserver un terminal tant qu'ils n'en n'ont pas (au lieu de ne demander que lorsqu'ils ont terminé leur petit tour).
 
-1. Introduisez une fonction `bool Aircraft::has_terminal() const` qui indique si un terminal a déjà été réservé pour l'avion (vous pouvez utilisé la valeur de `waypoints.back().type`).
+1. Introduisez une fonction `bool Aircraft::has_terminal() const` qui indique si un terminal a déjà été réservé pour l'avion (vous pouvez vous servir du type de `waypoints.back()`).
 2. Ajoutez une fonction `bool Aircraft::is_circling() const` qui indique si l'avion attend qu'on lui assigne un terminal pour pouvoir attérir.
 3. Introduisez une fonction `WaypointQueue Tower::reserve_terminal(Aircraft& aircraft)` qui essaye de réserver un `Terminal`. Si c'est possible, alors elle retourne un chemin vers ce `Terminal`, et un chemin vide autrement (vous pouvez vous inspirer / réutiliser le code de `Tower::get_instructions`).
-4. Modifiez la fonction `move()` (ou bien `update()`) de `Aircraft` afin qu'elle appelle `Tower::reserve_terminal` afin que les avions essayent de réserver un terminal s'ils sont en attente.
+4. Modifiez la fonction `move()` (ou bien `update()`) de `Aircraft` afin qu'elle appelle `Tower::reserve_terminal` si l'avion est en attente. Si vous ne voyez pas comment faire, vous pouvez essayer d'implémenter ces instructions :\
+\- si l'avion a terminé son service et sa course, alors on le supprime de l'aéroport (comme avant),\
+\- si l'avion attend qu'on lui assigne un terminal, on appelle `Tower::reserve_terminal` et on modifie ses `waypoints` si le terminal a effectivement pu être réservé,\
+\- si l'avion a terminé sa course actuelle, on appelle `Tower::get_instructions` (comme avant).
 
 ### C - Minimiser les crashs
 
@@ -114,14 +117,14 @@ Indiquez dans la console quel avion a été réapprovisionné ainsi que la quant
 5. Définissez maintenant une fonction `refill_aircraft_if_needed` dans la classe `Terminal`, prenant un paramètre `fuel_stock` par référence non-constante.
 Elle devra appeler la fonction `refill` sur l'avion actuellement au terminal, si celui-ci a vraiment besoin d'essence.  
 
-6. Modifiez la fonction `Aircraft::update`, afin de mettre-en-oeuvre les étapes suivantes.\
+6. Modifiez la fonction `Airport::update`, afin de mettre-en-oeuvre les étapes suivantes.\
 \- Si `next_refill_time` vaut 0 :\
-    \* `fuel_stock` est incrémenté de la valeur de `ordered_full`.\
+    \* `fuel_stock` est incrémenté de la valeur de `ordered_fuel`.\
     \* `ordered_fuel` est recalculé en utilisant le minimum entre `AircraftManager::get_required_fuel()` et `5'000` (il s'agit du volume du camion citerne qui livre le kérosène).\
     \* `next_refill_time` est réinitialisé à `100`.\
     \* La quantité d'essence reçue, la quantité d'essence en stock et la nouvelle quantité d'essence commandée sont affichées dans la console.\
 \- Sinon `next_refill_time` est décrémenté.\
-\- Les avions de chacun des terminaux sont réapprovionnés s'ils doivent l'être.
+\- Chaque terminal réapprovisionne son avion s'il doit l'être.
 
 ### E - Paramétrage (optionnel)
 
