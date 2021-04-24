@@ -14,7 +14,7 @@
 
 using namespace std::string_literals;
 
-const std::string airlines[8] = { "AF", "LH", "EY", "DL", "KL", "BA", "AY", "EY" };
+
 
 TowerSimulation::TowerSimulation(int argc, char** argv) :
     help { (argc > 1) && (std::string { argv[1] } == "--help"s || std::string { argv[1] } == "-h"s) }
@@ -35,22 +35,16 @@ TowerSimulation::~TowerSimulation()
     delete airport;
 }
 
-std::unique_ptr<Aircraft> TowerSimulation::create_aircraft(const AircraftType& type) const
+std::unique_ptr<Aircraft> TowerSimulation::create_aircraft(const AircraftType& type)
 {
-    assert(airport); // make sure the airport is initialized before creating aircraft
-
-    const std::string flight_number = airlines[std::rand() % 8] + std::to_string(1000 + (rand() % 9000));
-    const float angle       = (rand() % 1000) * 2 * 3.141592f / 1000.f; // random angle between 0 and 2pi
-    const Point3D start     = Point3D { std::sin(angle), std::cos(angle), 0 } * 3 + Point3D { 0, 0, 2 };
-    const Point3D direction = (-start).normalize();
-
-    // La gestion des Aircrafts se fait maintenant via des unique_ptr de bout en bout.
-    return std::make_unique<Aircraft>(type, flight_number, start, direction, airport->get_tower());
+    assert(airport);
+    return factory.create_aircraft(type, airport->get_tower());
 }
 
-std::unique_ptr<Aircraft> TowerSimulation::create_random_aircraft() const
+std::unique_ptr<Aircraft> TowerSimulation::create_random_aircraft()
 {
-    return create_aircraft(*(aircraft_types[rand() % 3]));
+    assert(airport);
+    return factory.create_random_aircraft(airport->get_tower());
 }
 
 // On doit supprimer le const sur create_keystrokes, car on a maintenant des inputs succeptibles de modifier
@@ -78,7 +72,7 @@ void TowerSimulation::create_keystrokes()
     GL::keystrokes.emplace('p', []() { GL::is_paused = !GL::is_paused; });
 
     for (auto i = '0'; i < '8'; ++i) {
-        GL::keystrokes.emplace(i, [this, i]() { std::cout << manager.get_aircraft_number(airlines[i - '0']) << std::endl; });
+        GL::keystrokes.emplace(i, [this, i]() { std::cout << manager.get_aircraft_number(factory.get_airline(i - '0')) << std::endl; });
     }
 }
 
