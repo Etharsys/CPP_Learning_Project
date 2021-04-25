@@ -1,8 +1,12 @@
 #include "aircraft_factory.hpp"
 
 
+#include <cassert>
+
+
 const std::string AircraftFactory::get_airline(int airline) const
 {
+    assert(airline >= 0 && airline < 8);
     return airlines[airline];
 }
 

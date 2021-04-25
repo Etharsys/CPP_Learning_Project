@@ -76,28 +76,39 @@ void Aircraft::operate_landing_gear()
     }
 }
 
-
 bool Aircraft::update()
 {
+    constexpr auto front = false;
     if (waypoints.empty())
     {
-        if (is_service_done)
-        {
-            return false;
-        }
-
-        constexpr auto front = false;
-        for (const auto& wp: control.get_instructions(*this))
+        if (is_service_done) { return false; }
+        for (const auto& wp : control.get_instructions(*this))
         {
             add_waypoint<front>(wp);
         }
     }
-
     if (!is_at_terminal)
     {
         turn_to_waypoint();
         // move in the direction of the current speed
         pos += speed;
+
+        if (fuel == 0)
+        {
+            if (has_terminal()) {
+                control.unreserved_terminal(*this);
+            }
+            using namespace std::string_literals;
+            throw AircraftCrash { flight_number + " MayDay MayDay we are out of fuel : crash"s };
+        }
+        fuel -= 1;
+        if (is_circling()) 
+        {
+            for (const auto& wp : control.reserve_terminal(*this))
+            {
+                add_waypoint<front>(wp);
+            }
+        } 
 
         // if we are close to our next waypoint, stike if off the list
         if (!waypoints.empty() && distance_to(waypoints.front()) < DISTANCE_THRESHOLD)
@@ -115,11 +126,10 @@ bool Aircraft::update()
 
         if (is_on_ground())
         {
-            landing_gear_deployed = false;
             if (!landing_gear_deployed)
             {
                 using namespace std::string_literals;
-                throw AircraftCrash { flight_number + " crashed into the ground"s };
+                throw AircraftCrash { flight_number + " crashed into the ground (landing gear not deployed)"s };
             }
         }
         else
@@ -135,11 +145,20 @@ bool Aircraft::update()
         // update the z-value of the displayable structure
         GL::Displayable::z = pos.x() + pos.y();
     }
-
     return true;
 }
 
 void Aircraft::display() const
 {
     type.texture.draw(project_2D(pos), { PLANE_TEXTURE_DIM, PLANE_TEXTURE_DIM }, get_speed_octant());
+}
+
+bool Aircraft::has_terminal() const
+{
+    return waypoints.back().is_at_terminal();
+}
+
+bool Aircraft::is_circling() const
+{
+    return !has_terminal() && !is_service_done && !is_on_ground();
 }

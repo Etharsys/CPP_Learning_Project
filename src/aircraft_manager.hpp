@@ -12,9 +12,11 @@ private:
     std::vector<std::unique_ptr<Aircraft>> aircrafts;
 
 public:
+    int nb_crash = 0;
     void add(std::unique_ptr<Aircraft> aircraft);
 
     bool update() override;
 
     int get_aircraft_number(const std::string& company);
+
 };

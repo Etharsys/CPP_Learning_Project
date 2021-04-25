@@ -11,6 +11,7 @@
 #include "tower.hpp"
 
 #include <vector>
+#include <cassert>
 
 class Airport : public GL::Displayable, public GL::DynamicObject
 {
@@ -58,7 +59,7 @@ public:
         texture { image },
         terminals { type.create_terminals() },
         tower { *this }
-    {}
+    { assert(image); }
 
     Tower& get_tower() { return tower; }
 

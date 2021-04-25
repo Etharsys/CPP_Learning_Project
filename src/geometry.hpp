@@ -58,7 +58,7 @@ struct Point
         return *this;
     }
 
-    Point& operator*= (const float scalar)
+    Point& operator*= (const Type scalar)
     {
         std::transform( values.begin(), values.end(), 
             values.begin() , [scalar](Type v) { return v * scalar; } );
@@ -86,7 +86,7 @@ struct Point
         return result; 
     }
 
-    Point operator* (const float scalar) const
+    Point operator* (const Type scalar) const
     {
         Point result = *this;
         result *= scalar;
@@ -103,10 +103,10 @@ struct Point
 
     float length() const 
     { 
-        return std::sqrt(
-            std::reduce( values.begin(), values.end(), 0, 
-                [](Type v1, Type v2){ return v1*v1 + v2*v2; } )
-            );
+        auto tmp = values;
+        std::transform( values.begin(), values.end(), 
+            tmp.begin() , [](Type v) { return v * v; } );
+        return std::sqrt( std::reduce(tmp.begin(), tmp.end()) );
     }
     //return std::sqrt(x() * x() + y() * y() + z() * z());
 

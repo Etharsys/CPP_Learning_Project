@@ -16,6 +16,7 @@ private:
     Airport* airport = nullptr;
     AircraftManager manager;
     AircraftFactory factory;
+    bool init;
 
     TowerSimulation(const TowerSimulation&) = delete;
     TowerSimulation& operator=(const TowerSimulation&) = delete;

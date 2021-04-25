@@ -39,6 +39,12 @@ public:
         }
     }
 
+    void force_suppression()
+    {
+        std::cout << "delete crashed plane " << current_aircraft->get_flight_num() << '\n';
+        current_aircraft = nullptr;
+    }
+
     bool update() override
     {
         if (in_use() && is_servicing())

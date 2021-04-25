@@ -20,6 +20,7 @@ private:
     Tower& control;
     bool landing_gear_deployed = false; // is the landing gear deployed?
     bool is_at_terminal        = false;
+    int  fuel;
 
     // TASK-0 C-3
     // L'endroit le plus approprié pour retirer l'avion, c'est lorsque :
@@ -60,6 +61,9 @@ private:
     bool is_on_ground() const { return pos.z() < DISTANCE_THRESHOLD; }
     float max_speed() const { return is_on_ground() ? type.max_ground_speed : type.max_air_speed; }
 
+    bool has_terminal() const;
+    bool is_circling() const;
+
     Aircraft(const Aircraft&) = delete;
     Aircraft& operator=(const Aircraft&) = delete;
 
@@ -74,6 +78,7 @@ public:
         control { control_ }
     {
         speed.cap_length(max_speed());
+        fuel = rand() % 2851 + 150;
     }
 
     const std::string& get_flight_num() const { return flight_number; }

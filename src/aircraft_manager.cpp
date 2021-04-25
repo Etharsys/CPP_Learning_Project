@@ -9,31 +9,20 @@ void AircraftManager::add(std::unique_ptr<Aircraft> aircraft)
 
 bool AircraftManager::update()
 {
-    aircrafts.erase( std::remove_if(aircrafts.begin(), aircrafts.end(),
-            [](const std::unique_ptr<Aircraft>& aircraft){ //try catch ici
-                bool up;
-                try {
-                    up = !aircraft->update();
-                } catch (const AircraftCrash& ac) {
-                    std::cerr << "aircraft has crash" << std::endl;
-                }
-                return up; }), aircrafts.end());
-
-    /*for (auto aircraft_it = aircrafts.begin(); aircraft_it != aircrafts.end();)
-    {
-        // On doit déréférencer 2x pour obtenir une référence sur l'Aircraft : une fois pour déréférencer
-        // l'itérateur, et une deuxième fois pour déréférencer le unique_ptr.
-        auto& aircraft = **aircraft_it;
-        if (aircraft.update())
-        {
-            ++aircraft_it;
-        }
-        else
-        {
-            aircraft_it = aircrafts.erase(aircraft_it);
-        }
-    }*/
-
+    aircrafts.erase(std::remove_if(aircrafts.begin(), aircrafts.end(),
+                [this](std::unique_ptr<Aircraft>& aircraft_it) {
+                    auto& aircraft = *aircraft_it;
+                    try
+                    {
+                        return !aircraft.update();
+                    }
+                    catch (const AircraftCrash& ac)
+                    {
+                        std::cerr << ac.what() << std::endl;
+                        nb_crash++;
+                        return true;
+                    }
+                }), aircrafts.end());
     return true;
 }
 

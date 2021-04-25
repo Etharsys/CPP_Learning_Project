@@ -38,13 +38,17 @@ TowerSimulation::~TowerSimulation()
 std::unique_ptr<Aircraft> TowerSimulation::create_aircraft(const AircraftType& type)
 {
     assert(airport);
-    return factory.create_aircraft(type, airport->get_tower());
+    auto ac = factory.create_aircraft(type, airport->get_tower());
+    assert(ac != nullptr);
+    return ac;
 }
 
 std::unique_ptr<Aircraft> TowerSimulation::create_random_aircraft()
 {
     assert(airport);
-    return factory.create_random_aircraft(airport->get_tower());
+    auto ac = factory.create_random_aircraft(airport->get_tower());
+    assert(ac != nullptr);
+    return ac;
 }
 
 // On doit supprimer le const sur create_keystrokes, car on a maintenant des inputs succeptibles de modifier
@@ -74,6 +78,8 @@ void TowerSimulation::create_keystrokes()
     for (auto i = '0'; i < '8'; ++i) {
         GL::keystrokes.emplace(i, [this, i]() { std::cout << manager.get_aircraft_number(factory.get_airline(i - '0')) << std::endl; });
     }
+
+    GL::keystrokes.emplace('m', [this]() { std::cout << "Nombre de crashs : " << manager.nb_crash << std::endl; } );
 }
 
 void TowerSimulation::display_help() const
@@ -91,10 +97,12 @@ void TowerSimulation::display_help() const
 
 void TowerSimulation::init_airport()
 {
+    assert(!init);
     airport = new Airport { one_lane_airport, Point3D { 0, 0, 0 },
                             new img::Image { one_lane_airport_sprite_path.get_full_path() } };
 
     GL::move_queue.emplace(airport);
+    init = true;
 }
 
 void TowerSimulation::launch()
